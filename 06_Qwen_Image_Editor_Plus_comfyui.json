@@ -1,0 +1,864 @@
+{
+  "id": "9a08af2c-a057-4a58-ae14-c8c0da4098e2",
+  "revision": 0,
+  "last_node_id": 15,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "ModelSamplingAuraFlow",
+      "pos": [
+        500,
+        450
+      ],
+      "size": [
+        400,
+        80
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 2
+        },
+        {
+          "label": "shift",
+          "name": "shift",
+          "type": "FLOAT",
+          "widget": {
+            "name": "shift"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "title": "6. Ajuste AuraFlow (Vital)",
+      "properties": {
+        "Node name for S&R": "ModelSamplingAuraFlow",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        3.1
+      ]
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [
+        1000,
+        100
+      ],
+      "size": [
+        315,
+        474
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 7
+        },
+        {
+          "label": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 4
+        },
+        {
+          "label": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "label": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "label": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          }
+        },
+        {
+          "label": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          }
+        },
+        {
+          "label": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          }
+        },
+        {
+          "label": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          }
+        },
+        {
+          "label": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          }
+        },
+        {
+          "label": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "title": "7. Generador (4 Pasos)",
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        762526951674748,
+        "randomize",
+        4,
+        1,
+        "euler",
+        "simple",
+        1
+      ]
+    },
+    {
+      "id": 8,
+      "type": "VAEEncode",
+      "pos": [
+        500,
+        600
+      ],
+      "size": [
+        400,
+        100
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "pixels",
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "label": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "label": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "title": "Codificador Inicial",
+      "properties": {
+        "Node name for S&R": "VAEEncode",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "CLIPTextEncode",
+      "pos": [
+        501.5550231933594,
+        772.8071899414062
+      ],
+      "size": [
+        400,
+        88
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 11
+        },
+        {
+          "label": "text",
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "title": "4b. Negativo (Vac�o)",
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        1711.737548828125,
+        92.90262603759766
+      ],
+      "size": [
+        296.77325439453125,
+        270
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "label": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "image_urls",
+          "name": "image_urls",
+          "type": "STRING"
+        }
+      ],
+      "title": "8. Resultado",
+      "properties": {
+        "Node name for S&R": "SaveImage",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [
+        1349.372802734375,
+        91.84650421142578
+      ],
+      "size": [
+        315,
+        100
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 9
+        },
+        {
+          "label": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "label": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "title": "Decodificador",
+      "properties": {
+        "Node name for S&R": "VAEDecode",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 4,
+      "type": "TextEncodeQwenImageEditPlus",
+      "pos": [
+        500,
+        100
+      ],
+      "size": [
+        450,
+        300
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "label": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 5
+        },
+        {
+          "label": "image1",
+          "name": "image1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1
+        },
+        {
+          "label": "image2",
+          "name": "image2",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "image3",
+          "name": "image3",
+          "shape": 7,
+          "type": "IMAGE"
+        },
+        {
+          "label": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CONDITIONING",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "title": "4. Prompt Maestro",
+      "properties": {
+        "Node name for S&R": "TextEncodeQwenImageEditPlus",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "A hyper-realistic studio portrait of a young woman with ash-white hair, long and wavy, falling over her shoulders with darker roots. She has electric blue eyes, flawless porcelain skin, subtle makeup: rosy blush, nude pink glossy lips, brown-pink eyeshadow, thin eyeliner, long lashes. She is wearing a sapphire blue triangle bikini top with thin straps. Pure white background. Soft diffused frontal lighting. High detail, ultra HD, 8K, professional photography style, fashion editorial aesthetic."
+      ]
+    },
+    {
+      "id": 5,
+      "type": "VAELoader",
+      "pos": [
+        -58.31669235229492,
+        783.8685302734375
+      ],
+      "size": [
+        400,
+        100
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            5,
+            6
+          ]
+        }
+      ],
+      "title": "5. Cargar VAE Qwen",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "qwen_image_vae.safetensors"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [
+        -52.517066955566406,
+        586.765625
+      ],
+      "size": [
+        400,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          }
+        },
+        {
+          "label": "type",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          }
+        },
+        {
+          "label": "device",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            3,
+            11
+          ]
+        }
+      ],
+      "title": "3. Cargar Cerebro (CLIP)",
+      "properties": {
+        "Node name for S&R": "CLIPLoader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+        "qwen_image",
+        "default"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [
+        -46.67445373535156,
+        403.0675964355469
+      ],
+      "size": [
+        400,
+        100
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          }
+        },
+        {
+          "label": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "title": "2. Cargar Qwen 2511",
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "qwen_image_edit_2511_bf16.safetensors",
+        "default"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        -40.50757598876953,
+        -21.34666633605957
+      ],
+      "size": [
+        315,
+        314
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "image",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          }
+        },
+        {
+          "label": "upload",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "label": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "label": "MASK",
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "title": "1. Imagen a Editar",
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "7a8d6e87185ad96b3ce8a0ca7ed0b102b281019ab7dfca991b9cd74a6f9206e9.png",
+        "image"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "Note _O",
+      "pos": [
+        -555.0053100585938,
+        429.0870056152344
+      ],
+      "size": [
+        449.242431640625,
+        462.28082275390625
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Nota 1",
+      "properties": {
+        "widget_ue_connectable": {},
+        "Node name for S&R": "Note _O"
+      },
+      "widgets_values": [
+        "\n--- ESPAÑOL ---\n\n⚠️ COMPATIBILIDAD: Este flujo funciona al 100% en la plataforma RunningHub.\n\n🚀 [Flujo #06] Qwen 2.5-11 Image Editor Plus - Edición de Alta Precisión\n\n✅ MODELO REQUERIDO: qwen_image_edit_2511_bf16.safetensors\n\nEste flujo utiliza el avanzado modelo Qwen 2511 Edit para realizar modificaciones inteligentes en imágenes existentes. A diferencia del inpainting común, este modelo \"entiende\" el contexto visual para mantener la consistencia facial mientras cambia vestimenta o añade accesorios.\n\n✅ Funciones: Cambio de ropa, adición de accesorios (sombreros/gafas), retoque de detalles (pestañas/maquillaje).\n✅ Motor: Qwen 2.5-11 (2511) + AuraFlow.\n✅ Rendimiento: Optimizado para ejecutarse en solo 4-6 pasos.\n\n--- ENGLISH ---\n\n⚠️ COMPATIBILITY: This workflow works 100% on the RunningHub platform.\n\n🚀 [Workflow #06] Qwen 2.5-11 Image Editor Plus - High Precision Editing\n\n✅ REQUIRED MODEL: qwen_image_edit_2511_bf16.safetensors\n\nThis workflow leverages the advanced Qwen 2511 Edit model to perform intelligent modifications on existing images. Unlike standard inpainting, this model \"understands\" visual context to maintain facial consistency while changing outfits or adding accessories.\n\n✅ Features: Clothing swap, accessory addition (hats/glasses), detail retouching (eyelashes/makeup).\n✅ Engine: Qwen 2.5-11 (2511) + AuraFlow.\n✅ Performance: Optimized to run in just 4-6 steps.\n\n🔗 GitHub: https://github.com/FernandoPh1/mis-flujos-comfyui"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "Note",
+      "pos": [
+        -491.468505859375,
+        133.67344665527344
+      ],
+      "size": [
+        286.7632141113281,
+        234.98692321777344
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "\"Ponlo directamente aquí en el chat\", \"escríbelo en la caja de texto\" o \"no lo pongas en el canvas\".\n\n\nSolo para mi.."
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 13,
+      "type": "Note",
+      "pos": [
+        -1192.528076171875,
+        -25.825719833374023
+      ],
+      "size": [
+        565.0447387695312,
+        551.7581176757812
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Technical note: High-Precision Image Editing Prompt Assistant",
+      "properties": {},
+      "widgets_values": [
+        "You are an expert prompt engineer for AI image editing and generation. Your task is to analyze the provided image and generate a highly precise, detailed, and effective text-to-image prompt that will be used in ComfyUI or similar workflows to modify the image according to the user’s request.\n\nFollow this methodology strictly:\n\n1. First, describe the original image in full detail — including hair color and texture, eye color, skin tone, makeup, clothing, background, lighting, style, pose, framing, and overall mood. Use accurate and specific vocabulary (for example, do not say “blonde” if the hair is actually ash-white). Never invent details that are not visible in the image.\n\n2. Then ask the user:\n“What specific change would you like to make to this image? Please describe it clearly (e.g., ‘change the bikini top to sapphire blue’, ‘make her hair platinum blonde’, ‘add a sunset background’).”\n\n3. Once the user responds, generate a new prompt that:\n- Preserves all unchanged elements from the original description.\n- Incorporates ONLY the requested modification, described with precision.\n- Does not alter character identity, facial features, or global style unless explicitly requested.\n- Uses clear, concrete, visually descriptive language.\n- Avoids negative prompts or exclusions — describe only what should appear.\n- Includes technical quality tags such as: “hyper-realistic”, “8K”, “ultra HD”, “professional photography”, “studio lighting”, etc.\n- Maintains consistent style, composition, and perspective unless otherwise specified.\n\nExample output format:\nA hyper-realistic studio portrait of a young woman with ash-white hair, long and wavy, falling over her shoulders with darker roots. She has electric blue eyes, flawless porcelain skin, subtle makeup: rosy blush, nude pink glossy lips, brown-pink eyeshadow, thin eyeliner, long lashes. She is wearing a sapphire blue triangle bikini top with thin straps. Pure white background. Soft diffused frontal lighting. High detail, ultra HD, 8K, professional photography style, fashion editorial aesthetic.\n\nImportant:\nNever assume details that are not clearly visible. Always base your description strictly on the image. If something is ambiguous, ask for clarification before generating the final prompt.\n\n———\nTo write an effective and efficient prompt, copy this entire text and provide it to the AI responsible for designing prompts. This way, the AI will understand the context and generate the exact prompt needed.\n"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 15,
+      "type": "Note",
+      "pos": [
+        -1185.89013671875,
+        580.3765258789062
+      ],
+      "size": [
+        565.0447387695312,
+        551.7581176757812
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Technical note: High-Precision Image Editing Prompt Assistant",
+      "properties": {},
+      "widgets_values": [
+        "Eres un ingeniero experto en la edición y generación de imágenes con IA. Tu tarea consiste en analizar la imagen proporcionada y generar una instrucción de texto a imagen altamente precisa, detallada y efectiva que se utilizará en ComfyUI o flujos de trabajo similares para modificar la imagen según la solicitud del usuario.\n\nSigue esta metodología estrictamente:\n\n1. Primero, describe la imagen original con todo detalle, incluyendo el color y la textura del cabello, el color de los ojos, el tono de piel, el maquillaje, la ropa, el fondo, la iluminación, el estilo, la pose, el encuadre y la atmósfera general. Usa un vocabulario preciso y específico (por ejemplo, no digas \"rubio\" si el cabello es en realidad blanco ceniza). Nunca inventes detalles que no sean visibles en la imagen.\n\n2. Luego, pregunta al usuario:\n\"¿Qué cambio específico te gustaría hacer en esta imagen? Por favor, descríbelo claramente (por ejemplo, 'cambiar la parte superior del bikini a azul zafiro', 'hacer que su cabello sea rubio platino', 'agregar un fondo de atardecer')\".\n\n3. Una vez que el usuario responda, genere una nueva solicitud que:\n- Conserve todos los elementos sin cambios de la descripción original.\n- Incorpore SOLO la modificación solicitada, descrita con precisión.\n- No altere la identidad del personaje, los rasgos faciales ni el estilo general a menos que se solicite explícitamente.\n- Utilice un lenguaje claro, concreto y visualmente descriptivo.\n- Evite solicitudes negativas o exclusiones: describa solo lo que debe aparecer.\n- Incluya etiquetas de calidad técnica como: \"hiperrealista\", \"8K\", \"ultra HD\", \"fotografía profesional\", \"iluminación de estudio\", etc.\n- Mantenga un estilo, una composición y una perspectiva consistentes a menos que se especifique lo contrario.\n\nEjemplo de formato de salida:\nRetrato de estudio hiperrealista de una joven con cabello blanco ceniza, largo y ondulado, que cae sobre los hombros con raíces más oscuras. Tiene ojos azul eléctrico, piel de porcelana impecable, maquillaje sutil: rubor rosado, labios brillantes color rosa nude, sombra de ojos marrón-rosa, delineador fino y pestañas largas. Lleva un top de bikini triangular azul zafiro con tirantes finos. Fondo blanco puro. Iluminación frontal suave y difusa. Alto detalle, ultra HD, 8K, estilo fotográfico profesional, estética editorial de moda.\n\nImportante:\nNunca suponga detalles que no sean claramente visibles. Siempre base su descripción estrictamente en la imagen. Si algo es ambiguo, solicite una aclaración antes de generar la consigna final.\n\n———\nPara escribir una consigna efectiva y eficiente, copie este texto completo y proporcióneselo a la IA responsable del diseño de las consignas. De esta manera, la IA comprenderá el contexto y generará la consigna exacta necesaria."
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      2,
+      "IMAGE"
+    ],
+    [
+      2,
+      2,
+      0,
+      6,
+      0,
+      "MODEL"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      4,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      5,
+      5,
+      0,
+      4,
+      1,
+      "VAE"
+    ],
+    [
+      6,
+      5,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      7,
+      6,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      8,
+      8,
+      0,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      9,
+      7,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      11,
+      0,
+      7,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      11,
+      3,
+      0,
+      11,
+      0,
+      "CLIP"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "links_added_by_ue": [],
+    "ue_links": [],
+    "0246.VERSION": [
+      0,
+      0,
+      4
+    ],
+    "ds": {
+      "scale": 0.7247295000000117,
+      "offset": [
+        831.4746258048604,
+        207.13312510364693
+      ]
+    },
+    "frontendVersion": "1.23.0",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
